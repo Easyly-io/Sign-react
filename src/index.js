@@ -1,8 +1,8 @@
 import React, {useEffect, useState, useRef} from "react";
 const moment = require("moment");
 
-const endURL = "http://localhost:3002";
-// const endURL = "https://sign.easyly.com";
+// const endURL = "http://localhost:3002";
+const endURL = "https://sign.easyly.com";
 
 
 const ContractEditor = ({publishKey,subAccountSID,id,marketplaceTemplateId,color,type,fileURL,name,tags,onSave}) => {
