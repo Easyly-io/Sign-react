@@ -1,18 +1,18 @@
 # React.JS Contracts
 
-React components for Contracter Network Leads
+React components for Contracts by Easyly
 
-[![build status](https://img.shields.io/npm/l/contracter)](https://www.npmjs.com/package/contracter)
-[![npm version](https://img.shields.io/npm/v/contracter)](https://www.npmjs.com/package/contracter)
+[![build status](https://img.shields.io/npm/l/@easyly/sign-js)](https://www.npmjs.com/package/@easyly/sign-js)
+[![npm version](https://img.shields.io/npm/v/@easyly/sign-js)](https://www.npmjs.com/package/@easyly/sign-js)
 
 React.js front-end package of creating, editing & signing contracts.<br/>
-To interact with the API - see [contracter-js](https://github.com/network-leads/contracter-js)
+To interact with the API - see [sign-js](https://github.com/Easyly-io/Sign-js)
 
 ### Minimal example
 
 First, install this package
 ```sh
-npm install contracter
+npm install @easyly/sign-react
 ```
 
 #### Create/Edit contract template using hooks
@@ -20,7 +20,7 @@ npm install contracter
 ```jsx
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {ContractEditor} from "contracter";
+import {ContractEditor} from "@easyly/sign-react";
 
 const App = () => {
 
@@ -28,11 +28,7 @@ const App = () => {
         // data = {contractId:10, type:"save/update"}
     }
 
-    return (
-        <div>
-            <ContractEditor publishKey={"XXXXXXXXXXXXXX"} onSave={save} />
-        </div>
-    );
+    return <ContractEditor publishKey={"XXXXXXXXXXXXXX"} onSave={save} />
 };
 
 ReactDOM.render(<App />, document.body);
@@ -68,7 +64,7 @@ ReactDOM.render(<App />, document.body);
 ```jsx
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {ContractSign} from "contracter";
+import {ContractSign} from "@easyly/sign-react";
 
 const App = () => {
 
