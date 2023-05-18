@@ -1,6 +1,6 @@
 {
-  "name": "sign-react",
-  "version": "1.0.96",
+  "name": "easyly-sign-react",
+  "version": "1.0.97",
   "description": "React.js package for contracts by Easyly",
   "main": "dist/index.js",
   "scripts": {
