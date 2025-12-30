@@ -29,6 +29,7 @@ var ContractEditor = function ContractEditor(_ref) {
       name = _ref.name,
       tags = _ref.tags,
       onSave = _ref.onSave;
+  var iframeRef = (0, _react.useRef)(null);
   var url = endURL + "/editor/edit?PK=" + publishKey + "&subAccountSID=" + subAccountSID + "&id=" + id + "&marketplaceTemplateId=" + marketplaceTemplateId + "&color=" + color + "&type=" + type + "&fileURL=" + encodeURIComponent(fileURL) + "&name=" + name + "&tags=" + encodeURIComponent(JSON.stringify(tags)); // useEffect((e) => {
 
   window.addEventListener("message", function (event) {
@@ -41,7 +42,34 @@ var ContractEditor = function ContractEditor(_ref) {
     } catch (e) {}
   }, false); // },[])
 
+  (0, _react.useEffect)(function () {
+    console.log("[A][1]");
+
+    var handleMessage = function handleMessage(event) {
+      try {
+        console.log("[A][2] ", event);
+        var data = JSON.parse(event.data);
+        console.log("[A][3] ", data);
+        console.log("[A][4] ", data?.type, tags); // When iframe signals it's ready, send the tags
+
+        if (data?.type == "ready") {
+          iframeRef.current?.contentWindow?.postMessage(JSON.stringify({
+            type: "tags",
+            data: tags
+          }), "*");
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    window.addEventListener("message", handleMessage, false);
+    return function () {
+      return window.removeEventListener("message", handleMessage, false);
+    };
+  }, [tags]);
   return /*#__PURE__*/_react["default"].createElement("iframe", {
+    ref: iframeRef,
     src: url,
     style: {
       width: "100%",
