@@ -30,7 +30,8 @@ var ContractEditor = function ContractEditor(_ref) {
       tags = _ref.tags,
       onSave = _ref.onSave;
   var iframeRef = (0, _react.useRef)(null);
-  var url = endURL + "/editor/edit?PK=" + publishKey + "&subAccountSID=" + subAccountSID + "&id=" + id + "&marketplaceTemplateId=" + marketplaceTemplateId + "&color=" + color + "&type=" + type + "&fileURL=" + encodeURIComponent(fileURL) + "&name=" + name + "&tags=" + encodeURIComponent(JSON.stringify(tags)); // useEffect((e) => {
+  var url = endURL + "/editor/edit?PK=" + publishKey + "&subAccountSID=" + subAccountSID + "&id=" + id + "&marketplaceTemplateId=" + marketplaceTemplateId + "&color=" + color + "&type=" + type + "&fileURL=" + encodeURIComponent(fileURL) + "&name=" + name; // +"&tags="+encodeURIComponent(JSON.stringify(tags))
+  // useEffect((e) => {
 
   window.addEventListener("message", function (event) {
     try {
@@ -43,14 +44,9 @@ var ContractEditor = function ContractEditor(_ref) {
   }, false); // },[])
 
   (0, _react.useEffect)(function () {
-    console.log("[A][1]");
-
     var handleMessage = function handleMessage(event) {
       try {
-        console.log("[A][2] ", event);
-        var data = JSON.parse(event.data);
-        console.log("[A][3] ", data);
-        console.log("[A][4] ", data?.type, tags); // When iframe signals it's ready, send the tags
+        var data = JSON.parse(event.data); // When iframe signals it's ready, send the tags
 
         if (data?.type == "ready") {
           iframeRef.current?.contentWindow?.postMessage(JSON.stringify({
@@ -82,7 +78,9 @@ var ContractEditor = function ContractEditor(_ref) {
 exports.ContractEditor = ContractEditor;
 
 var ContractSign = function ContractSign(props) {
-  var url = endURL + "/editor/sign/" + props?.contractKey + "/?PK=" + props?.publishKey + "&tags=" + encodeURIComponent(JSON.stringify(props?.tags)); // useEffect((e)=>{
+  var iframeRef = (0, _react.useRef)(null);
+  var url = endURL + "/editor/sign/" + props?.contractKey + "/?PK=" + props?.publishKey; // +"&tags="+encodeURIComponent(JSON.stringify(props?.tags))
+  // useEffect((e)=>{
 
   window.addEventListener("message", function (event) {
     try {
@@ -94,7 +92,29 @@ var ContractSign = function ContractSign(props) {
     } catch (e) {}
   }, false); // },[])
 
+  (0, _react.useEffect)(function () {
+    var handleMessage = function handleMessage(event) {
+      try {
+        var data = JSON.parse(event.data); // When iframe signals it's ready, send the tags
+
+        if (data?.type == "ready") {
+          iframeRef.current?.contentWindow?.postMessage(JSON.stringify({
+            type: "tags",
+            data: props?.tags || []
+          }), "*");
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    window.addEventListener("message", handleMessage, false);
+    return function () {
+      return window.removeEventListener("message", handleMessage, false);
+    };
+  }, [props]);
   return /*#__PURE__*/_react["default"].createElement("iframe", {
+    ref: iframeRef,
     src: url,
     style: {
       width: "100%",
