@@ -31,17 +31,6 @@ var ContractEditor = function ContractEditor(_ref) {
       onSave = _ref.onSave;
   var iframeRef = (0, _react.useRef)(null);
   var url = endURL + "/editor/edit?PK=" + publishKey + "&subAccountSID=" + subAccountSID + "&id=" + id + "&marketplaceTemplateId=" + marketplaceTemplateId + "&color=" + color + "&type=" + type + "&fileURL=" + encodeURIComponent(fileURL) + "&name=" + name; // +"&tags="+encodeURIComponent(JSON.stringify(tags))
-  // useEffect((e) => {
-
-  window.addEventListener("message", function (event) {
-    try {
-      var data = JSON.parse(event.data);
-
-      if (data?.type == "onSave" && onSave) {
-        onSave(data?.data);
-      }
-    } catch (e) {}
-  }, false); // },[])
 
   (0, _react.useEffect)(function () {
     var handleMessage = function handleMessage(event) {
@@ -54,6 +43,10 @@ var ContractEditor = function ContractEditor(_ref) {
             data: tags
           }), "*");
         }
+
+        if (data?.type == "onSave" && onSave) {
+          onSave(data?.data);
+        }
       } catch (e) {
         console.error(e);
       }
@@ -63,7 +56,7 @@ var ContractEditor = function ContractEditor(_ref) {
     return function () {
       return window.removeEventListener("message", handleMessage, false);
     };
-  }, [tags]);
+  }, [tags, onSave]);
   return /*#__PURE__*/_react["default"].createElement("iframe", {
     ref: iframeRef,
     src: url,
@@ -80,17 +73,6 @@ exports.ContractEditor = ContractEditor;
 var ContractSign = function ContractSign(props) {
   var iframeRef = (0, _react.useRef)(null);
   var url = endURL + "/editor/sign/" + props?.contractKey + "/?PK=" + props?.publishKey; // +"&tags="+encodeURIComponent(JSON.stringify(props?.tags))
-  // useEffect((e)=>{
-
-  window.addEventListener("message", function (event) {
-    try {
-      var data = JSON.parse(event.data);
-
-      if (data?.type == "onSubmit" && props?.onSubmit) {
-        props?.onSubmit(data?.data);
-      }
-    } catch (e) {}
-  }, false); // },[])
 
   (0, _react.useEffect)(function () {
     var handleMessage = function handleMessage(event) {
@@ -102,6 +84,10 @@ var ContractSign = function ContractSign(props) {
             type: "tags",
             data: props?.tags || []
           }), "*");
+        }
+
+        if (data?.type == "onSubmit" && props?.onSubmit) {
+          props?.onSubmit(data?.data);
         }
       } catch (e) {
         console.error(e);
